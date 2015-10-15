@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ciclo_vida_activity</string>
+
+
+    <string name="text_oncreate">onCreate</string>
+    <string name="text_onstart">onStart</string>
+    <string name="text_onrestart">onRestart</string>
+    <string name="text_onresume">onResume</string>
+    <string name="text_onpause">onPause</string>
+    <string name="text_onstop">onStop</string>
+    <string name="text_ondestroy">onDestroy</string>
+</resources>
