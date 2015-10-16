@@ -3,22 +3,33 @@ package com.josecuentas.ciclo_vida_activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 
 public class MainActivity extends Activity{
 
     public static final String TAG = "MainActivity";
+    public static final String BUNDLE = "data";
     private String mensaje="", resultado="";
     TextView mTxvResultado;
+    ScrollView svContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState!=null) {
+//            resultado = savedInstanceState.getString(BUNDLE) + resultado;
+//            showLog("Se recupera los datos == Inicio");
+//            showLog(resultado);
+//            showLog("Se recupera los datos == Fin");
+        }
+
         mensaje= getResources().getString(R.string.text_oncreate);
         showLog(mensaje);
         mTxvResultado = (TextView) findViewById(R.id.txv_result);
+        svContainer = (ScrollView)findViewById(R.id.sview_container);
         resultado += mensaje + "\n";
         mTxvResultado.setText(resultado);
     }
@@ -83,14 +94,23 @@ public class MainActivity extends Activity{
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         showLog("onSaveInstanceState");
-        outState.putString("text", resultado);
+        outState.putString(BUNDLE, resultado);
+        outState.putIntArray("ARTICLE_SCROLL_POSITION",
+                new int[]{svContainer.getScrollX(), svContainer.getScrollY()});
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         showLog("onRestoreInstanceState");
-        resultado = savedInstanceState.getString("text")+resultado;
+        resultado = savedInstanceState.getString(BUNDLE)+resultado;
+        final int[] position = savedInstanceState.getIntArray("ARTICLE_SCROLL_POSITION");
+        if(position != null)
+            svContainer.post(new Runnable() {
+                public void run() {
+                    svContainer.scrollTo(position[0], position[1]);
+                }
+            });
     }
 
     private void showLog(String mensaje){
@@ -104,4 +124,6 @@ public class MainActivity extends Activity{
             e.printStackTrace();
         }
     }
+
+
 }
